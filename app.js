@@ -1,7 +1,13 @@
 const express = require('express')
-const app = express()
+const server = express()
 
-app.get('/', (req, res) => {
-  res.send('HELLO')
-})
-app.listen(3000, () => console.log('Listening in port 3000'))
+const productRouter = require('./routes/products')
+const userRouter = require('./routes/users')
+
+const bodyParser = require('body-parser')
+
+server.use(bodyParser.json())
+
+server.use('/products', productRouter)
+server.use('/user', userRouter)
+server.listen(3000, () => console.log('Server running'))
