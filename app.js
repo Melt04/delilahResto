@@ -9,5 +9,5 @@ const bodyParser = require('body-parser')
 server.use(bodyParser.json())
 
 server.use('/products', productRouter)
-server.use('/user', userRouter)
+server.use('/users', userRouter)
 server.listen(3000, () => console.log('Server running'))
