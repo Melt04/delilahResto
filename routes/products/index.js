@@ -7,53 +7,54 @@ const {
   deleteProductById,
   updateProductById,
 } = require('../../controllers/products')
+const { validateAdminMiddleware } = require('../../routes/users/middleware')
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try {
     const products = await getAllProducts()
     res.status(200).json(products)
-  } catch (error) {
-    res.json(error)
+  } catch (err) {
+    const error = new Error('Se ha produdico un error inesperado')
+    next(error)
   }
 })
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateAdminMiddleware, async (req, res) => {
   let { id } = req.params
   try {
     let product = await getProductById(id)
     res.status(201).json(product)
-  } catch (error) {
-    res.json(error)
+  } catch (err) {
+    const error = new Error('Se ha produdico un error inesperado')
+    next(error)
   }
 })
-router.post('/', async (req, res) => {
+router.post('/', validateAdminMiddleware, async (req, res, next) => {
   let { product } = req.body
   try {
     const createdProduct = await createProduct(product)
-    return res.json(createdProduct)
-  } catch (error) {
-    console.log(error.stack)
-
-    return res.json(error)
+    return res.status(201).json({ message: 'Producto creado' })
+  } catch (err) {
+    const error = new Error('Se ha produdico un error inesperado')
+    next(error)
   }
-  res.json(product)
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', validateAdminMiddleware, async (req, res, next) => {
   try {
     let { id } = req.params
-    const deletedProduct = deleteProductById(id)
-    return res.json(deletedProduct)
-  } catch (error) {
-    console.log(error.message)
-    return res.json(error)
+    const deletedProduct = await deleteProductById(id)
+    res.status(200).json({ message: 'Borrado con exito' })
+  } catch (err) {
+    const error = new Error('Se ha produdico un error inesperado')
+    next(error)
   }
 })
-router.put('/:id', async (req, res) => {
+router.put('/:id', validateAdminMiddleware, async (req, res, next) => {
   const { id } = req.params
   const { product } = req.body
   try {
     const updadatedProduct = await updateProductById(product, id)
-    res.json(updadatedProduct)
+    res.status(200).json({ message: 'Producto actualizdo' })
   } catch (error) {
     res.json(error)
   }

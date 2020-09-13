@@ -3,62 +3,38 @@ const router = express.Router()
 const {
   createUser,
   loginUser,
-  validateRole,
   validateLoggedUser,
 } = require('../../controllers/users')
-async function validateLoggedMiddleware(req, res, next) {
-  let { token } = req.body
-  try {
-    const decodedToken = await validateLoggedUser(token)
-    req.role = decodedToken.role
-    next()
-  } catch (error) {
-    return res.send(error.message)
-  }
-}
-function validateAdminMiddleware(req, res, next) {
-  if (req.role === 2) {
-    next()
-  } else {
-    res.json('No eres admin')
-  }
-}
-router.post('/signup', async (req, res) => {
+router.post('/signup', async (req, res, next) => {
   const { user } = req.body
   try {
-    const [results, metadata] = await createUser(user)
-    console.log(results)
-    return res.json(results)
-  } catch (error) {
-    res.json(error)
-  }
-})
-router.get('/signin', async (req, res) => {
-  const { userName, password } = req.body
-  loginUser(userName, password).then((token) => {
-    if (token) {
-      res.send(token)
-    } else {
-      res.send('Datos no correctos')
+    const results = await createUser(user)
+    if (!results) {
+      const error = new Error('Se ha producido un error al crear el usuario')
+      next(error)
     }
-  })
-})
-router.get(
-  '/hola',
-  validateLoggedMiddleware,
-  validateAdminMiddleware,
-  (req, res) => {
-    res.send('Bienvenido')
+    return res.json({ message: 'Usuario Creado' })
+  } catch (e) {
+    const error = new Error('Se ha producido un error al crear el usuario')
+    next(error)
   }
-)
-router.get('/validate', async (req, res) => {
-  const { token } = req.body
+})
+router.get('/signin', async (req, res, next) => {
   try {
-    let myToken = await validateRole(token)
-
-    res.json(myToken)
-  } catch (error) {
-    res.json(error.message)
+    const { userName, password } = req.body.user
+    const token = await loginUser(userName, password)
+    if (token) {
+      res.json({ token })
+    } else {
+      const error = new Error('Credenciales incorrectas')
+      error.codeStatus = 403
+      next(error)
+    }
+  } catch (e) {
+    const error = new Error('Credenciales incorrectas')
+    error.codeStatus = 403
+    next(error)
   }
 })
+
 module.exports = router

@@ -12,10 +12,9 @@ async function getDescriptionAndPrice(products) {
       type: QueryTypes.SELECT,
     }
   )
-
   const fields = result.reduce(
     (acc, product, index) => {
-      const { product_name, id, price } = product
+      const { id, price } = product
       const { qty } = products.find((product) => product.id === id)
       console.log('Numerk:' + index)
       acc.price = acc.price + price * qty
@@ -31,16 +30,15 @@ async function getDescriptionAndPrice(products) {
 
 function getAllOrders() {
   return sequelize.query(
-    'select * from orders join states on orders.id_state=states.id ',
+    'select orders.*,states.state_name,users.user_name  from orders join states on orders.id_state=states.id  join users on users.id=orders.id_user',
     {
       type: QueryTypes.SELECT,
     }
   )
 }
-async function createOrder(order) {
-  const { products, payment, id_user } = order
+async function createOrder(order, id_user) {
+  const { products, payment } = order
   const { price, product_name } = await getDescriptionAndPrice(products)
-
   const [idInsertedOrder] = await sequelize.query(
     'Insert into orders(id_user,total_price,payment,description)values(:user,:price,:payment,:description)',
     {
@@ -53,7 +51,6 @@ async function createOrder(order) {
       type: QueryTypes.INSERT,
     }
   )
-
   products.forEach(async (product) => {
     const orderProductInserted = await sequelize.query(
       ' Insert into orderProducts(id_order,id_product) values (:idOrder,:idProduct) ',

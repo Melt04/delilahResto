@@ -12,7 +12,7 @@ function getProductById(id) {
   })
 }
 function deleteProductById(id) {
-  return sequelize.query('Delete from products WHERE ID= :id', {
+  return sequelize.query('UPDATE  products SET isAvail= 0 WHERE ID= :id', {
     replacements: { id },
     type: QueryTypes.DELETE,
   })
