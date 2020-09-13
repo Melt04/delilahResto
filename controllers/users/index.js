@@ -1,13 +1,12 @@
 const sequelize = require('../../conexion')
 const { QueryTypes } = require('sequelize')
 const bcrypt = require('bcrypt')
-const saltRounds = 5
+const { saltRounds } = require('../../const')
 const jwt = require('jsonwebtoken')
 const { MY_SECRET_TOKEN } = require('../../const')
 
 function createUser({ userName, password, name, email, phoneNumber, address }) {
   bcrypt.hash(password, saltRounds, (error, data) => {
-    console.log(data)
     password = data
     return sequelize.query(
       'INSERT INTO users (user_name,password,name,email,phone_number,address) values         (:userName,:password,:name,:email,:phoneNumber,:address)',
@@ -50,8 +49,13 @@ function loginUser(userName, password) {
     })
 }
 
-function validateLoggedUser(token) {
-  return jwt.verify(token, MY_SECRET_TOKEN)
+function validateLoggedUser(req, res, next) {
+  const token = req.headers.authorization
+  try {
+    return jwt.verify(token, MY_SECRET_TOKEN)
+  } catch (e) {
+    next('Error')
+  }
 }
 
 function validateRole(token) {

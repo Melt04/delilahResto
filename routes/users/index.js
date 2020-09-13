@@ -1,13 +1,11 @@
 const express = require('express')
 const router = express.Router()
-
 const {
   createUser,
   loginUser,
   validateRole,
   validateLoggedUser,
 } = require('../../controllers/users')
-
 async function validateLoggedMiddleware(req, res, next) {
   let { token } = req.body
   try {
@@ -15,10 +13,9 @@ async function validateLoggedMiddleware(req, res, next) {
     req.role = decodedToken.role
     next()
   } catch (error) {
-    res.send(error.message)
+    return res.send(error.message)
   }
 }
-
 function validateAdminMiddleware(req, res, next) {
   if (req.role === 2) {
     next()
@@ -46,7 +43,6 @@ router.get('/signin', async (req, res) => {
     }
   })
 })
-
 router.get(
   '/hola',
   validateLoggedMiddleware,
