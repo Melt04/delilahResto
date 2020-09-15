@@ -1,5 +1,8 @@
-const { validateLoggedUser } = require('../../controllers/users')
+const jwt = require('jsonwebtoken')
 
+function validateLoggedUser(token) {
+  return jwt.verify(token, MY_SECRET_TOKEN)
+}
 async function validateLoggedMiddleware(req, res, next) {
   try {
     const headerToken = req.headers.authorization

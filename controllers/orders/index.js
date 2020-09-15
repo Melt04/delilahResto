@@ -64,4 +64,13 @@ async function createOrder(order, id_user) {
   })
 }
 
-module.exports = { getAllOrders, createOrder }
+function updateOrder(order, id) {
+  const { newState } = order
+
+  return sequelize.query('Update orders SET id_state= :newState where id=:id', {
+    replacements: { newState, id },
+    type: QueryTypes.UPDATE,
+  })
+}
+
+module.exports = { getAllOrders, createOrder, updateOrder }

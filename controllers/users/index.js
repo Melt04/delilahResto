@@ -54,8 +54,45 @@ async function loginUser(userName, password) {
     })
 }
 
-function validateLoggedUser(token) {
-  return jwt.verify(token, MY_SECRET_TOKEN)
+function getAllusers() {
+  return sequelize.query('Select * from users', { type: QueryTypes.SELECT })
 }
-
-module.exports = { createUser, loginUser, validateLoggedUser }
+function getUserById(id) {
+  return sequelize.query(
+    'Select user_name,name,email,phone_number,address from users where id=:id',
+    {
+      replacements: { id },
+      type: QueryTypes.SELECT,
+    }
+  )
+}
+function hasFavorite(id) {
+  return sequelize.query('UPDATE users SET has_favorite=1 where id=:id', {
+    replacements: { id },
+  })
+}
+function addAdmin(id) {
+  return sequelize.query('Update users SET role=2 where id=:id', {
+    replacements: { id },
+  })
+}
+function addFavorite(id, idProduct) {
+  return sequelize.query(
+    'INSERT INTO favorites(id_user,id_product)values(:id,:idProduct)',
+    {
+      replacements: {
+        id,
+        idProduct,
+      },
+    }
+  )
+}
+module.exports = {
+  createUser,
+  loginUser,
+  getAllusers,
+  getUserById,
+  addFavorite,
+  hasFavorite,
+  addAdmin,
+}
