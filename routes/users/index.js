@@ -19,7 +19,7 @@ const userSchema = {
   name: 'string',
   email: 'string',
   password: 'string',
-  phoneNumber: 'number',
+  phoneNumber: 'string',
   address: 'string',
 }
 const loginSchema = {
@@ -82,7 +82,7 @@ router.post(
     }
   }
 )
-router.get(
+router.post(
   '/signin',
   validatePayload(loginSchema, 'user'),
   async (req, res, next) => {
