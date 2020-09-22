@@ -1,17 +1,19 @@
 openapi: 3.0.2
-info:
-  title: API de Resto
+info: 
+  title: API de Todo List
   description: Adminstra  la creacion de usuarios,  productos y pedidos de un delivery.
   version: 1.0.0
-servers:
+servers: 
   - url: http://localhost:3000
-
+  
+  
 paths:
+  
   /products:
     get:
       security:
         - bearerAuth: []
-      summary: Lista de todos los productos
+      summary:  Lista de todos los productos
       description: Devuelve una  lista de todos los productos
       responses:
         200:
@@ -21,16 +23,21 @@ paths:
               schema:
                 type: array
                 items:
-                  '$ref': '#/components/schemas/products'
+                  "$ref": "#/components/schemas/products"
         401:
-          '$ref': '#/components/responses/AccesoDenegado'
+         "$ref":  "#/components/responses/AccesoDenegado"
         204:
-          '$ref': '#/components/responses/NoContent'
-
+          "$ref":  "#/components/responses/NoContent"
+        
+        
+          
+          
+         
     post:
       security:
         - bearerAuth: []
-      x-scopes-role: -admin
+      x-scopes-role:
+        -admin
       requestBody:
         required: true
         content:
@@ -41,7 +48,7 @@ paths:
                 products:
                   type: object
                   properties:
-                    productName:
+                    productName: 
                       type: string
                     price:
                       type: number
@@ -51,7 +58,7 @@ paths:
                     thumbnail:
                       type: string
                       format: url
-      summary: Permite crear un producto
+      summary:  Permite crear un producto
       description: Devuelve una  lista de todos los productos
       responses:
         201:
@@ -59,23 +66,23 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  message:
+                 properties:
+                   message: 
                     type: string
         401:
-          '$ref': '#/components/responses/AccesoDenegado'
+         "$ref":  "#/components/responses/AccesoDenegado"
         400:
-          '$ref': '#/components/responses/MalFormato'
+          "$ref":  "#/components/responses/MalFormato"
         403:
-          '$ref': '#/components/responses/NoAutorizado'
-
+          "$ref":  "#/components/responses/NoAutorizado"  
+                
   /products/{id}:
     parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
+     - in: path
+       name: id
+       schema:
+        type: integer
+       required: true
     get:
       security:
         - bearerAuth: []
@@ -88,20 +95,20 @@ paths:
             aplication/json:
               schema:
                 items:
-                  '$ref': '#/components/schemas/products'
+                  "$ref": "#/components/schemas/products"
         401:
-          '$ref': '#/components/responses/AccesoDenegado'
-
+         "$ref":  "#/components/responses/AccesoDenegado"
+          
         204:
-          '$ref': '#/components/responses/NoContent'
+          "$ref":  "#/components/responses/NoContent"
         400:
-          '$ref': '#/components/responses/MalFormato'
+         "$ref":  "#/components/responses/MalFormato"
     delete:
       security:
         - bearerAuth: []
       x-scopes-role:
-        - admin
-
+         - admin
+       
       summary: Borrar un producto con el id indicado
       description: Devuelve el producto indicado con el ID pasado por parametro
       responses:
@@ -110,20 +117,20 @@ paths:
           content:
             aplication/json:
               schema:
-                properties:
-                  message:
-                    type: string
+               properties:
+                message:
+                  type: string
         204:
-          '$ref': '#/components/responses/NoContent'
+          "$ref": "#/components/responses/NoContent"
         403:
-          '$ref': '#/components/responses/NoAutorizado'
+          "$ref":  "#/components/responses/NoAutorizado"
     put:
       security:
         - bearerAuth: []
       x-scopes-role:
-        - admin
+         - admin
       requestBody:
-        content:
+       content:
           application/json:
             schema:
               type: object
@@ -132,8 +139,8 @@ paths:
                   type: object
                   properties:
                     productName:
-                      type: string
-                    price:
+                     type: string
+                    price: 
                       type: number
                       format: float
                     description:
@@ -141,7 +148,7 @@ paths:
                     thumbnail:
                       type: string
                       format: url
-
+                  
       summary: Actualiza un producto
       description: Devuelve el producto indicado con el ID pasado por parametro
       responses:
@@ -150,16 +157,19 @@ paths:
           content:
             aplication/json:
               schema:
-                properties:
-                  message:
-                    type: string
+               properties:
+                message:
+                  type: string
         204:
-          '$ref': '#/components/responses/NoContent'
+          "$ref": "#/components/responses/NoContent"
         403:
-          '$ref': '#/components/responses/NoAutorizado'
+          "$ref":  "#/components/responses/NoAutorizado"
         400:
-          '$ref': '#/components/responses/MalFormato'
-
+          "$ref": "#/components/responses/MalFormato"
+          
+          
+        
+            
   /users/signup:
     post:
       requestBody:
@@ -184,7 +194,7 @@ paths:
                       format: phone
                     address:
                       type: string
-
+              
       summary: Crea un usuario
       description: Da de alta un usuario con los datos proporcionados en el body del request
       responses:
@@ -193,11 +203,11 @@ paths:
           content:
             aplication/json:
               schema:
-                properties:
-                  nombre:
-                    type: string
+                  properties:
+                    nombre:
+                     type: string
         400:
-          '$ref': '#/components/responses/MalFormato'
+          "$ref": "#/components/responses/MalFormato"
         422:
           description: Username o email ya existe
           content:
@@ -207,7 +217,7 @@ paths:
                   message:
                     type: string
   /users/signin:
-    post:
+     post:
       requestBody:
         content:
           application/json:
@@ -222,27 +232,27 @@ paths:
                     password:
                       type: string
       summary: Logea un usuario
-      description: Logea al usuario y devuelve un token para manejar las sesiones
+      description: Logea al usuario y devuelve un token para manejar las sesiones 
       responses:
         200:
           description: Usuario logeado
           content:
             aplication/json:
               schema:
-                properties:
-                  token:
-                    type: string
+                  properties:
+                    token:
+                     type: string
         400:
-          '$ref': '#/components/responses/MalFormato'
+          "$ref": "#/components/responses/MalFormato"
         401:
-          '$ref': '#/components/responses/NoAutorizado'
-
+          "$ref": "#/components/responses/NoAutorizado"
+        
   /users:
     get:
       security:
         - bearerAuth: []
       x-scopes-role:
-        - admin
+         - admin
       summary: Se obtiene todos los usuarios
       description: Devuelve todos los usuarios, se necesita ser administrador
       responses:
@@ -252,21 +262,21 @@ paths:
             aplication/json:
               schema:
                 items:
-                  '$ref': '#/components/schemas/users'
-
+                  "$ref": "#/components/schemas/users"
+        
         401:
-          '$ref': '#/components/responses/AccesoDenegado'
+          "$ref": "#/components/responses/AccesoDenegado"
         403:
-          '$ref': '#/components/responses/NoAutorizado'
-
+          "$ref":  "#/components/responses/NoAutorizado"
+          
   /users/favorites/{id}:
-    parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-    post:
+     parameters:
+     - in: path
+       name: id
+       schema:
+        type: integer
+       required: true
+     post:
       security:
         - bearerAuth: []
       summary: Se agrega un producto favorito al usuario
@@ -278,33 +288,33 @@ paths:
             aplication/json:
               schema:
                 properties:
-                  message:
-                    type: string
+                    message:
+                     type: string
         401:
-          '$ref': '#/components/responses/AccesoDenegado'
-
+          "$ref": "#/components/responses/AccesoDenegado"
+          
   /users/profile:
-    get:
-      security:
+      get:
+        security:
         - bearerAuth: []
-      summary: Se obtiene los datos del usuario logeado
-      description: Devuelve datos del usuario por medio del token
-      responses:
-        200:
-          description: Se devuelve el usuario logeado
-          content:
-            aplication/json:
-              schema:
-                items:
-                  '$ref': '#/components/schemas/users'
-        401:
-          '$ref': '#/components/responses/AccesoDenegado'
+        summary: Se obtiene los datos del usuario logeado
+        description: Devuelve datos del usuario por medio del token
+        responses:
+          200:
+            description: Se devuelve el usuario logeado
+            content:
+              aplication/json:
+                schema:
+                  items:
+                    "$ref": "#/components/schemas/users"
+          401:
+            "$ref": "#/components/responses/AccesoDenegado"
   /users/:user/admin:
     post:
       security:
         - bearerAuth: []
       x-scopes-role:
-        - admin
+         - admin
       summary: Se cambia el estado del usuario a ADMIN
       description: Al ingresar un usuario se pasa a ADMIN
       responses:
@@ -316,9 +326,9 @@ paths:
                 properties:
                   message:
                     type: string
-
+        
         403:
-          '$ref': '#/components/responses/NoAutorizado'
+          "$ref":  "#/components/responses/NoAutorizado"            
   /orders:
     post:
       requestBody:
@@ -331,65 +341,65 @@ paths:
                   type: object
                   properties:
                     payment:
-                      type: string
+                     type: string
                     products:
                       type: array
                       items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          qty:
-                            type: integer
-
+                       type: object
+                       properties:
+                         id:
+                          type: integer
+                         qty:
+                          type: integer
+       
       security:
         - bearerAuth: []
       summary: Se crea un pedido
       description: se crea un pedido y se asocia al usuario logeado
       responses:
-        201:
-          description: Se registro el pedido correctamente
-          content:
-            aplication/json:
-              schema:
-                properties:
-                  message:
-                    type: string
-        400:
-          '$ref': '#/components/responses/MalFormato'
-        401:
-          '$ref': '#/components/responses/AccesoDenegado'
+          201:
+            description: Se registro el pedido correctamente
+            content:
+              aplication/json:
+                schema:
+                  properties:
+                    message:
+                      type: string
+          400:
+           "$ref": "#/components/responses/MalFormato"
+          401:
+           "$ref": "#/components/responses/AccesoDenegado"
     get:
-      security:
+     security:
         - bearerAuth: []
-      x-scopes-role:
-        - admin
-      summary: Se obtiene todos los pedidos
-      description: Devuelve todos los pedidos, debe ser admin para poder acceder
-      responses:
-        200:
-          description: Devuelve todos los pedidos
-          content:
-            aplication/json:
-              schema:
-                items:
-                  '$ref': '#/components/schemas/orders'
-
-        403:
-          '$ref': '#/components/responses/NoAutorizado'
+     x-scopes-role:
+         - admin
+     summary: Se obtiene todos los pedidos
+     description: Devuelve todos los pedidos, debe ser admin para poder acceder
+     responses:
+       200:
+         description: Devuelve todos los pedidos
+         content:
+           aplication/json:
+             schema:
+               items:
+                 "$ref": "#/components/schemas/orders"
+        
+       403:
+         "$ref": "#/components/responses/NoAutorizado"
   /orders/{id}:
     put:
-      security:
+       security:
         - bearerAuth: []
-      x-scopes-role:
-        - admin
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-      requestBody:
+       x-scopes-role:
+         - admin
+       parameters:
+       - in: path
+         name: id
+         schema:
+          type: integer
+         required: true
+       requestBody:
         required: true
         content:
           application/json:
@@ -401,25 +411,56 @@ paths:
                   properties:
                     newState:
                       type: integer
-      summary: Cambia el estado de un pedido
-      description: Realiza el cambio de estado de un pedido
-      responses:
+       summary: Cambia el estado de un pedido
+       description: Realiza el cambio de estado de un pedido
+       responses:
         200:
-          description: Devuelve el mensaje de exito al modificar el estado
-          content:
-            aplication/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+         description: Devuelve el mensaje de exito al modificar el estado
+         content:
+          aplication/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
         403:
-          '$ref': '#/components/responses/NoAutorizado'
+         "$ref": "#/components/responses/NoAutorizado"
         401:
-          '$ref': '#/components/responses/AccesoDenegado'
+          "$ref": "#/components/responses/AccesoDenegado"
         400:
-          '$ref': '#/components/responses/MalFormato'
-
+          "$ref": "#/components/responses/MalFormato"
+    delete:
+       security:
+        - bearerAuth: []
+       x-scopes-role:
+         - admin
+       parameters:
+       - in: path
+         name: id
+         schema:
+          type: integer
+         required: true
+       summary: Elimina un pedido
+       description: Elimina un pedido
+       responses:
+        200:
+         description: Devuelve el mensaje de exito al eliminar  el pedido
+         content:
+          aplication/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+        403:
+         "$ref": "#/components/responses/NoAutorizado"
+        401:
+          "$ref": "#/components/responses/AccesoDenegado"
+        500:
+          "$ref": "#/components/responses/ErrorInterno"
+      
+        
+      
 components:
   responses:
     MalFormato:
@@ -430,7 +471,7 @@ components:
             properties:
               error:
                 type: string
-
+      
     AccesoDenegado:
       description: No se encuentra token de acceso
       content:
@@ -455,10 +496,17 @@ components:
             properties:
               error:
                 type: string
-
+    ErrorInterno:
+      description: Producto de un error interno de la apliccion.Problemas conexion de db/reglas de la db
+      content:
+        application/json:
+          schema:
+            properties:
+              error:
+                type: string
   schemas:
     orderStates:
-      type: object
+      type:  object
       properties:
         id:
           type: integer
@@ -477,7 +525,7 @@ components:
           type: string
         email:
           type: string
-        phoneNumber:
+        phoneNumber: 
           type: integer
         address:
           type: string
@@ -500,7 +548,7 @@ components:
         productName:
           type: string
         price:
-          type: number
+          type:  number
         description:
           type: string
         thumbnail:
@@ -534,16 +582,38 @@ components:
         payment:
           type: string
     orderproduct:
-      type: object
+      type:  object
       properties:
         id:
-          type: integer
+          type:  integer
         idOrder:
           type: integer
         idProduct:
           type: integer
   securitySchemes:
-    bearerAuth:
+    bearerAuth:         
       type: http
       scheme: bearer
-      bearerFormat: JWT
+      bearerFormat: JWT    
+  
+    
+           
+        
+  
+        
+        
+    
+        
+        
+        
+
+  
+    
+  
+  
+    
+  
+  
+        
+      
+        

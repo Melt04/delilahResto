@@ -3,6 +3,7 @@ const {
   getAllOrders,
   createOrder,
   updateOrder,
+  deleteOrder,
 } = require('../../controllers/orders')
 const { validateAdminMiddleware } = require('../users/middleware')
 const { validatePayload } = require('../middleware')
@@ -39,7 +40,17 @@ router.post(
     }
   }
 )
-
+router.delete('/:id', validateAdminMiddleware, async (req, res, next) => {
+  const { id } = req.params
+  try {
+    const deleted = await deleteOrder(id)
+    return res.status(200).json({ message: 'Pedido Borrado' })
+  } catch (e) {
+    console.log(e)
+    const error = new Error('Se ha producido un error inesperado')
+    next(error)
+  }
+})
 router.put(
   '/:id',
   validateAdminMiddleware,

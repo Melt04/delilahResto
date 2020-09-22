@@ -36,6 +36,7 @@ router.get('/:id', validateAdminMiddleware, async (req, res) => {
     next(error)
   }
 })
+
 router.post(
   '/',
   validateAdminMiddleware,

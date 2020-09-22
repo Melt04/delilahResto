@@ -72,5 +72,15 @@ function updateOrder(order, id) {
     type: QueryTypes.UPDATE,
   })
 }
+async function deleteOrder(id) {
+  await sequelize.query('Delete from orderProducts where id_order=:id', {
+    replacements: { id },
+    type: QueryTypes.DELETE,
+  })
+  return sequelize.query('Delete from orders where id=:id', {
+    replacements: { id },
+    type: QueryTypes.DELETE,
+  })
+}
 
-module.exports = { getAllOrders, createOrder, updateOrder }
+module.exports = { getAllOrders, createOrder, updateOrder, deleteOrder }
